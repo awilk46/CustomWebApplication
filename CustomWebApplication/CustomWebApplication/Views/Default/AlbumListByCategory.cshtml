@@ -1,0 +1,49 @@
+﻿@model CustomWebApplication.Models.BigViewModel
+@{
+    ViewBag.Title = "AlbumListByCategory";
+}
+
+<div class="">
+    @foreach (var category in Model.Categories)
+    {
+        <a href="@Url.Action("AlbumListByCategory","Default",new { categoryID = category.CategoryID })" class="">@category.CategoryName</a>
+    }
+</div>
+
+
+
+<table style="margin: auto; text-align:center;">
+    <tr>
+        <td>ID albumu</td>
+        <td>Nazwa albumu</td>
+        <td>Nazwa zespołu</td>
+        <td>Okładka płyty</td>
+        <td>Rok wydania</td>
+        <td>Cena</td>
+    </tr>
+    @foreach (var item in Model.Albums)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AlbumID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AlbumName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BandName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AlbumCover)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+
+        </tr>
+    }
+
+</table>

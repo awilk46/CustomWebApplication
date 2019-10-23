@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomWebApplication.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,7 +12,15 @@ namespace CustomWebApplication.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            return View();
+            BigViewModel bvm = new BigViewModel
+            {
+                Albums = Album.GetAlbumList(),
+                Categories = Category.GetCategoriesList(),
+                Orders = Order.GetOrdersList(),
+                Songs = Song.GetSongList()
+            };
+            //albumList = bvm.Albums;
+            return View(bvm);
         }
     }
 }

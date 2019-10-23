@@ -102,6 +102,7 @@
     <Content Include="Web.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Default\AlbumListByCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -111,6 +112,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Album.cs" />
+    <Compile Include="Models\BigViewModel.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Song.cs" />
@@ -123,7 +125,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Default\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

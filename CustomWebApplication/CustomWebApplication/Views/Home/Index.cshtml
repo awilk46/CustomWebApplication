@@ -1,7 +1,8 @@
-﻿
-@{
-    ViewBag.Title = "Index";
-}
+﻿@model CustomWebApplication.Models.BigViewModel
 
-<h2>Index</h2>
-
+<div class="">
+    @foreach (var category in Model.Categories)
+    {
+        <a href="@Url.Action("AlbumListByCategory","Default",new { categoryID = category.CategoryID })" class="">@category.CategoryName</a>
+    }
+</div>

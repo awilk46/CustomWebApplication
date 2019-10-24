@@ -44,7 +44,6 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                <a href="@Url.Action("SongListByAlbum2","Default",new { albumID = item.AlbumID })" class="">Zobacz</a>
 
                 <button id="@item.AlbumID" type="button" class="btn btn-primary myModals" data-toggle="modal" data-target="#exampleModal-@item.AlbumID">
                     Zobacz
@@ -76,7 +75,7 @@
     {
     <script src="~/Scripts/jquery-1.10.2.js"></script>
     <script>
-
+        
         $(".myModals").on("click", function () {
             var Id = $(this).attr('id');
             var par = "#parent-" + Id;

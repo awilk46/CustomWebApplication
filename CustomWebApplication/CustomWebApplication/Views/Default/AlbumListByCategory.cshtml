@@ -20,6 +20,7 @@
         <td>Okładka płyty</td>
         <td>Rok wydania</td>
         <td>Cena</td>
+        <td>Lista Piosenek</td>
     </tr>
     @foreach (var item in Model.Albums)
     {
@@ -42,8 +43,59 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
+            <td>
+                <a href="@Url.Action("SongListByAlbum2","Default",new { albumID = item.AlbumID })" class="">Zobacz</a>
 
+                <button id="@item.AlbumID" type="button" class="btn btn-primary myModals" data-toggle="modal" data-target="#exampleModal-@item.AlbumID">
+                    Zobacz
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal-@item.AlbumID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-@item.AlbumID" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel-@item.AlbumID">@item.AlbumName @item.Year, @item.BandName</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>                           
+                            <div id="parent-@item.AlbumID" class="modal-body">
+
+                            </div>
+                            <div class="modal-footer">
+                                <button id="closeModal"type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
         </tr>
     }
-
 </table>
+@section scripts
+    {
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script>
+
+        $(".myModals").on("click", function () {
+            var Id = $(this).attr('id');
+            var par = "#parent-" + Id;
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("SongListByAlbum","Default")',
+                data: {albumID:Id},
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    for (var i in result) {
+
+                            $(par).append('<p class="toRemove">' + result[i].SongName + '</p>');
+                    }
+                },
+                error: function (response) {
+                    alert('error');
+                }
+            });
+        });
+    </script>
+}

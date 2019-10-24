@@ -36,8 +36,18 @@ namespace CustomWebApplication.Controllers
                          on song.AlbumID equals album.AlbumID
                          where (albumID == album.AlbumID)
                          select song).ToList();
-
+     
             return Json(songs,JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult SongListByAlbum2(int albumID)
+        {
+            var songs = (from song in Song.GetSongList()
+                         join album in Album.GetAlbumList()
+                         on song.AlbumID equals album.AlbumID
+                         where (albumID == album.AlbumID)
+                         select song).ToList();
+
+            return Json(new { html = songs }, JsonRequestBehavior.AllowGet);
         }
     }
 }

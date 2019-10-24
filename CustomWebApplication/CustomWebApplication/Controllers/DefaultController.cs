@@ -29,5 +29,15 @@ namespace CustomWebApplication.Controllers
 
             return View(bvm);
         }
+        public JsonResult SongListByAlbum(int albumID)
+        {
+            var songs = (from song in Song.GetSongList()
+                         join album in Album.GetAlbumList()
+                         on song.AlbumID equals album.AlbumID
+                         where (albumID == album.AlbumID)
+                         select song).ToList();
+
+            return Json(songs,JsonRequestBehavior.AllowGet);
+        }
     }
 }

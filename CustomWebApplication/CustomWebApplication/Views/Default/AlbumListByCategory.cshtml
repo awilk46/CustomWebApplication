@@ -14,17 +14,14 @@
 <div>
     <b>Szukaj po:</b>
     <select id="searchBy">
-        <option value="AlbumID">Id albumu</option>
         <option value="AlbumName">Nazwa albumu</option>
         <option value="BandName">Nazwa zespołu</option>
-        <option value="Price">Cena</option>
     </select>
     @Html.TextBox("Search")<input type="submit" id="searchBtn" value="Search" />
 </div>
 <table style="margin: auto; text-align:center;">
     <thead>
         <tr>
-            <td>Kategoria</td>
             <td>ID albumu</td>
             <td>Nazwa albumu</td>
             <td>Nazwa zespołu</td>
@@ -32,58 +29,59 @@
             <td>Rok wydania</td>
             <td>Cena</td>
             <td>Lista Piosenek</td>
+            <td class="hidden">Kategoria</td>
         </tr>
     </thead>
     <tbody id="dataSearching">
         @foreach (var item in Model.Albums)
         {
-            <tr>
-                <td>
-                    <input id="categoryID" class="" type="submit" value="@item.CategoryID" />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AlbumID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AlbumName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BandName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AlbumCover)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Year)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    <button id="@item.AlbumID" type="button" class="btn btn-primary myModals" data-toggle="modal" data-target="#exampleModal-@item.AlbumID">
-                        Zobacz
-                    </button>
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModal-@item.AlbumID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-@item.AlbumID" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel-@item.AlbumID">@item.AlbumName @item.Year, @item.BandName</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div id="parent-@item.AlbumID" class="modal-body">
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AlbumID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AlbumName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BandName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AlbumCover)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                <button id="@item.AlbumID" type="button" class="btn btn-primary myModals" data-toggle="modal" data-target="#exampleModal-@item.AlbumID">
+                    Zobacz
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal-@item.AlbumID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-@item.AlbumID" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel-@item.AlbumID">@item.AlbumName @item.Year, @item.BandName</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div id="parent-@item.AlbumID" class="modal-body">
 
-                                </div>
-                                <div class="modal-footer">
-                                    <button id="closeModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button id="closeModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
-                </td>
-            </tr>
+                </div>
+            </td>
+            <td>
+                <input id="categoryID" class="hidden" type="submit" value="@item.CategoryID" />
+            </td>
+        </tr>
         }
     </tbody>
 </table>
@@ -97,7 +95,7 @@
             var Id = $(this).attr('id');
             var par = "#parent-" + Id;
             $.ajax({
-                type: "GET",
+                type: "get",
                 url: '@Url.Action("SongListByAlbum","Default")',
                 data: {albumID:Id},
                 contentType: "application/json;charset=utf-8",
@@ -116,29 +114,30 @@
     </script>
     <script>
 
-        $("#searchBtn").keyup(function () {
+        $("#Search").keyup(function () {
 
             var searchBy = $("#searchBy").val();
             var searchVal = $("#Search").val();
             var setData = $("#dataSearching");
             var catId = $("#categoryID").val();
             setData.html("");
-            alert("tutaj");
+
+           // alert("tutaj");
             $.ajax({
                 type: "post",
-                //url: 'Url.Action("GetSearchingData","Default")',
+                //url: '@Url.Action("GetSearchingData","Default")',
                 url: "/Default/GetSearchingData?categoryID=" + catId + "&searchBy=" + searchBy + "&searchValue=" + searchVal,
-                //data: { categoryID: catId, searchBy: searchBy, searchValue: searchVal },
-               /* contentType: "application/json;charset=utf-8",
-                dataType: "json",*/
+               // data: { categoryID: catId, searchBy: searchBy, searchValue: searchVal },
+               // contentType: "application/json;charset=utf-8",
+                //dataType: "json",
                 contentType:"html",
                 success: function (result) {
-                    alert("eureka~!");
+                 //   alert("eureka~!");
                     if (result.length == 0) {
                         setData.append('<tr><td colspan="7" style="color: red;">Nie odnaleziono szukanej frazy</td></tr>');
                         
                     } else {
-                        $.each(result, function (index, value) {                          
+                        $.each(result, function (index , value) {                          
                             var Data = "<tr>" +
                                 "<td>" + value.AlbumID + "</td>" +
                                 "<td>" + value.AlbumName + "</td>" +
@@ -147,19 +146,16 @@
                                 "<td>" + value.Year + "</td>" +
                                 "<td>" + value.Price + "</td>" +
                                 "<td>" +
-                                "<button id=" + value.AlbumID + '"' + 'type="button" class="btn btn-primary myModals" data-toggle="modal" data-target="#exampleModal-' + value.AlbumID + '">' +
-                                "Zobacz" +
-                                "</button>" +
-                                '<div class="modal fade" id="exampleModal-' + value.AlbumID + '"' + 'tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-' + value.AlbumID + '" aria-hidden="true">' +
+                                "<button id=" + value.AlbumID + ' type="button" class="btn btn-primary myModals" data-toggle="modal" data-target="#exampleModal-' + value.AlbumID + '">' +
+                                "Zobacz </button>" +
+                                '<div class="modal fade" id="exampleModal-' + value.AlbumID + '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-' + value.AlbumID + '" aria-hidden="true">' +
                                 '<div class="modal-dialog" role="document">' +
                                 '<div class="modal-content">' +
                                 '<div class="modal-header">' +
                                 '<h5 class="modal-title" id="exampleModalLabel-' + value.AlbumID + '">' + value.AlbumName + ", " + value.Year + ", " + value.BandName + "</h5>" +
                                 '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
-                                '<span aria-hidden="true">&times;</span>' +
-                                "</button>" +
-                                "</div>" +
-                                '<div id="parent-' + value.AlbumID + '"' + 'class="modal-body">' +
+                                '<span aria-hidden="true">&times;</span> </button> </div>' +
+                                '<div id="parent-' + value.AlbumID + '" class="modal-body">' +
                                 "</div>" +
                                 '<div class="modal-footer">' +
                                 '<button id="closeModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>' +
@@ -168,6 +164,9 @@
                                 "</div>" +
                                 "</div>" +
                                 "</td>" +
+                                "<td>"+
+                                '<input id="categoryID" class="hidden" type="submit" value="' + value.CategoryID + "/>" +
+                                "</td>"+
                                 "</tr>";
                             setData.append(Data);
                         });

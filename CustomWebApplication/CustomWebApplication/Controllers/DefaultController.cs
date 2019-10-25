@@ -50,38 +50,17 @@ namespace CustomWebApplication.Controllers
                                       select album).ToList();
             List<Album> newAlbumList;
 
-            if (searchBy == "albumID")
-            {
-                 int Id = Convert.ToInt32(searchValue);
-                 newAlbumList = albumsWithCategory.Where(x => x.AlbumID == Id || searchValue == null).ToList();
-
-
-                return Json(newAlbumList, JsonRequestBehavior.AllowGet);
-            }
-            else if (searchBy == "AlbumName")
+             if (searchBy == "AlbumName")
             {
                 newAlbumList = albumsWithCategory.Where(x => x.AlbumName.StartsWith(searchValue, StringComparison.InvariantCultureIgnoreCase) || searchValue == null).ToList();
                 return Json(newAlbumList, JsonRequestBehavior.AllowGet);
             }
-            else if (searchBy == "BandName")
+            else
             {
                 newAlbumList = albumsWithCategory.Where(x => x.BandName.StartsWith(searchValue, StringComparison.InvariantCultureIgnoreCase) || searchValue == null).ToList();
                 return Json(newAlbumList, JsonRequestBehavior.AllowGet);
             }
-            else if (searchBy == "Price")
-            {
-            
-                int Pr = Convert.ToInt32(searchValue);
-                newAlbumList = albumsWithCategory.Where(x => x.Price == Pr || searchValue == null).ToList();
-                if (!int.TryParse(searchValue, out Pr))
-                {
-                    throw new FormatException();
-                }
-                return Json(newAlbumList, JsonRequestBehavior.AllowGet);
-            }
-            else {
-                return Json(albumsWithCategory, JsonRequestBehavior.AllowGet);
-            }       
+    
         }
 
     }

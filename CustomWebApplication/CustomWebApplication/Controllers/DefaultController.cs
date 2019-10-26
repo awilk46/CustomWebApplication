@@ -11,14 +11,33 @@ namespace CustomWebApplication.Controllers
     public class DefaultController : Controller
     {
         // GET: Default
-        public ActionResult AlbumListByCategory(int categoryID)
+        public ActionResult AlbumListByCategory(int categoryID, string sortBy)
         {
+           //string sortBy="";
+            ViewBag.SortAlbumNameParameter = string.IsNullOrEmpty(sortBy) ? "AlbumName desc" : "";
+            ViewBag.SortBandNameParameter = sortBy == "BandName" ? "BandName desc" : "BandName";
 
             var albumsWithCategory = (from album in Album.GetAlbumList()
                                  join category in Category.GetCategoriesList()
                                  on album.CategoryID equals category.CategoryID
                                  where (categoryID == album.CategoryID)
-                                 select album).ToList();
+                                 select album).ToList().AsQueryable();
+
+            switch (sortBy)
+            {
+                case "AlbumName desc":
+                    albumsWithCategory = albumsWithCategory.OrderByDescending(x=>x.AlbumName);
+                    break;
+                case "BandName desc":
+                    albumsWithCategory = albumsWithCategory.OrderByDescending(x => x.BandName);
+                    break;
+                case "BandName":
+                    albumsWithCategory = albumsWithCategory.OrderBy(x => x.BandName);
+                    break;
+                default:
+                    albumsWithCategory = albumsWithCategory.OrderBy(x => x.AlbumName);
+                    break;
+            }
 
             BigViewModel bvm = new BigViewModel
             {
@@ -43,22 +62,39 @@ namespace CustomWebApplication.Controllers
 
         public JsonResult GetSearchingData(int categoryID, string searchBy, string searchValue)
         {
-            var albumsWithCategory = (from album in Album.GetAlbumList()
-                                      join category in Category.GetCategoriesList()
-                                      on album.CategoryID equals category.CategoryID
-                                      where (categoryID == album.CategoryID)
-                                      select album).ToList();
-            List<Album> newAlbumList;
+            BigViewModel bvm;
 
-             if (searchBy == "AlbumName")
+            if (searchBy == "AlbumName")
             {
-                newAlbumList = albumsWithCategory.Where(x => x.AlbumName.StartsWith(searchValue, StringComparison.InvariantCultureIgnoreCase) || searchValue == null).ToList();
-                return Json(newAlbumList, JsonRequestBehavior.AllowGet);
+                var albumsWithCategory = (from album in Album.GetAlbumList()
+                                          join category in Category.GetCategoriesList()
+                                          on album.CategoryID equals category.CategoryID
+                                          where (categoryID == album.CategoryID)
+                                          select album).Where(x => x.AlbumName.
+                                          StartsWith(searchValue, StringComparison.InvariantCultureIgnoreCase) 
+                                          || searchValue == "")
+                                          .ToList();
+                bvm = new BigViewModel()
+                {
+                    Albums = albumsWithCategory
+                };
+                return Json(albumsWithCategory, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                newAlbumList = albumsWithCategory.Where(x => x.BandName.StartsWith(searchValue, StringComparison.InvariantCultureIgnoreCase) || searchValue == null).ToList();
-                return Json(newAlbumList, JsonRequestBehavior.AllowGet);
+                var albumsWithCategory = (from album in Album.GetAlbumList()
+                                          join category in Category.GetCategoriesList()
+                                          on album.CategoryID equals category.CategoryID
+                                          where (categoryID == album.CategoryID)
+                                          select album).Where(x => x.BandName.
+                                          StartsWith(searchValue, StringComparison.InvariantCultureIgnoreCase)
+                                          || searchValue == "")
+                                          .ToList();
+                bvm = new BigViewModel()
+                {
+                    Albums = albumsWithCategory
+                };
+                return Json(albumsWithCategory, JsonRequestBehavior.AllowGet);
             }
     
         }

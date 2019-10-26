@@ -13,7 +13,7 @@
 
 <div>
     <b>Szukaj po:</b>
-    <select id="searchBy">
+    <select id="searchby">
         <option value="AlbumName">Nazwa albumu</option>
         <option value="BandName">Nazwa zespołu</option>
     </select>
@@ -23,139 +23,114 @@
     <thead>
         <tr>
             <td>ID albumu</td>
-            <td>Nazwa albumu</td>
-            <td>Nazwa zespołu</td>
+            <td>@Html.ActionLink("Album Name", "AlbumListByCategory", new { categoryID = Request["categoryID"], sortBy = ViewBag.SortAlbumNameParameter })</td>
+            <td>@Html.ActionLink("Band Name", "AlbumListByCategory", new { categoryID = Request["categoryID"], sortBy = ViewBag.SortBandNameParameter })</td>
             <td>Okładka płyty</td>
             <td>Rok wydania</td>
             <td>Cena</td>
             <td>Lista Piosenek</td>
             <td class="hidden">Kategoria</td>
+            <td>
+                <input id="categoryID" class="hidden" type="submit" value="@Request["categoryID"]" />
+            </td>
         </tr>
     </thead>
     <tbody id="dataSearching">
         @foreach (var item in Model.Albums)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.AlbumID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AlbumName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BandName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AlbumCover)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Year)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                <button id="@item.AlbumID" type="button" class="btn btn-primary myModals" data-toggle="modal" data-target="#exampleModal-@item.AlbumID">
-                    Zobacz
-                </button>
-                <!-- Modal -->
-                <div class="modal fade" id="exampleModal-@item.AlbumID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-@item.AlbumID" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel-@item.AlbumID">@item.AlbumName @item.Year, @item.BandName</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div id="parent-@item.AlbumID" class="modal-body">
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AlbumID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AlbumName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BandName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AlbumCover)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    <button id="@item.AlbumID" type="button" class="btn btn-primary myModals" data-toggle="modal" data-target="#exampleModal-@item.AlbumID">
+                        Zobacz
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal-@item.AlbumID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-@item.AlbumID" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel-@item.AlbumID">@item.AlbumName @item.Year, @item.BandName</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div id="parent-@item.AlbumID" class="modal-body">
 
-                            </div>
-                            <div class="modal-footer">
-                                <button id="closeModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="closeModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </td>
-            <td>
-                <input id="categoryID" class="hidden" type="submit" value="@item.CategoryID" />
-            </td>
-        </tr>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
-@section scripts
-    {
-    <script src="~/Scripts/jquery-1.10.2.js"></script>
-    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script>
 
-        $(".myModals").on("click", function () {
-            var Id = $(this).attr('id');
-            var par = "#parent-" + Id;
-            $.ajax({
-                type: "get",
-                url: '@Url.Action("SongListByAlbum","Default")',
-                data: {albumID:Id},
-                contentType: "application/json;charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    for (var i in result) {
+    <script type="text/javascript">
+        $("#Search").on("input", function () {
 
-                            $(par).append('<p class="toRemove">' + result[i].SongName + '</p>');
-                    }
-                },
-                error: function (response) {
-                    alert('error');
-                }
-            });
-        });
-    </script>
-    <script>
-
-        $("#Search").keyup(function () {
-
-            var searchBy = $("#searchBy").val();
+            var searchby = $("#searchby").val();
             var searchVal = $("#Search").val();
-            var setData = $("#dataSearching");
             var catId = $("#categoryID").val();
+            //var catId = "3";
+            var setData = $("#dataSearching");
             setData.html("");
-
-           // alert("tutaj");
             $.ajax({
-                type: "post",
-                //url: '@Url.Action("GetSearchingData","Default")',
-                url: "/Default/GetSearchingData?categoryID=" + catId + "&searchBy=" + searchBy + "&searchValue=" + searchVal,
-               // data: { categoryID: catId, searchBy: searchBy, searchValue: searchVal },
-               // contentType: "application/json;charset=utf-8",
-                //dataType: "json",
-                contentType:"html",
+                url: "/Default/GetSearchingData",
+                type: "get",
+                dataType: "json",
+                
+                data: {
+                    categoryID: Number(catId),
+                    searchBy: searchby,
+                    searchValue: searchVal
+                },
                 success: function (result) {
-                 //   alert("eureka~!");
+
                     if (result.length == 0) {
                         setData.append('<tr><td colspan="7" style="color: red;">Nie odnaleziono szukanej frazy</td></tr>');
-                        
-                    } else {
-                        $.each(result, function (index , value) {                          
+                    }
+                    else {
+
+                        for (var i in result) {
                             var Data = "<tr>" +
-                                "<td>" + value.AlbumID + "</td>" +
-                                "<td>" + value.AlbumName + "</td>" +
-                                "<td>" + value.BandName + "</td>" +
-                                "<td>" + value.AlbumCover + "</td>" +
-                                "<td>" + value.Year + "</td>" +
-                                "<td>" + value.Price + "</td>" +
+                                "<td>" + result[i].AlbumID + "</td>" +
+                                "<td>" + result[i].AlbumName + "</td>" +
+                                "<td>" + result[i].BandName + "</td>" +
+                                "<td>" + result[i].AlbumCover + "</td>" +
+                                "<td>" + result[i].Year + "</td>" +
+                                "<td>" + parseFloat(result[i].Price) + "</td>" +
                                 "<td>" +
-                                "<button id=" + value.AlbumID + ' type="button" class="btn btn-primary myModals" data-toggle="modal" data-target="#exampleModal-' + value.AlbumID + '">' +
+                                '<button id="' + result[i].AlbumID + '" type="button" class="btn btn-primary myModals" data-toggle="modal" data-target="#exampleModal-' + result[i].AlbumID + '">' +
                                 "Zobacz </button>" +
-                                '<div class="modal fade" id="exampleModal-' + value.AlbumID + '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-' + value.AlbumID + '" aria-hidden="true">' +
+                                '<div class="modal fade" id="exampleModal-' + result[i].AlbumID + '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-' + result[i].AlbumID + '" aria-hidden="true">' +
                                 '<div class="modal-dialog" role="document">' +
                                 '<div class="modal-content">' +
                                 '<div class="modal-header">' +
-                                '<h5 class="modal-title" id="exampleModalLabel-' + value.AlbumID + '">' + value.AlbumName + ", " + value.Year + ", " + value.BandName + "</h5>" +
+                                '<h5 class="modal-title" id="exampleModalLabel-' + result[i].AlbumID + '">' + result[i].AlbumName + ", " + result[i].Year + ", " + result[i].BandName + "</h5>" +
                                 '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
                                 '<span aria-hidden="true">&times;</span> </button> </div>' +
-                                '<div id="parent-' + value.AlbumID + '" class="modal-body">' +
+                                '<div id="parent-' + result[i].AlbumID + '" class="modal-body">' +
                                 "</div>" +
                                 '<div class="modal-footer">' +
                                 '<button id="closeModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>' +
@@ -164,16 +139,79 @@
                                 "</div>" +
                                 "</div>" +
                                 "</td>" +
-                                "<td>"+
-                                '<input id="categoryID" class="hidden" type="submit" value="' + value.CategoryID + "/>" +
-                                "</td>"+
+                                "<td>" +
+                                '<input id="categoryID" class="hidden" type="submit" value="' + result[i].CategoryID + '"/>' +
+                                "</td>" +
                                 "</tr>";
                             setData.append(Data);
-                        });
+                        }
+                        openModal();
                     }
-
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    //alert(xhr.responseText);
+                    alert("Error!!: " + thrownError);
+                },
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+                    return xhr;
                 }
             });
         });
+
+        $(".myModals").on("click", function () {
+            var Id = $(this).attr('id');
+            var par = "#parent-" + Id;
+            var setData = $(par);
+            alert("comming");
+            setData.html("");
+            $.ajax({               
+                type: "get",
+                url: '@Url.Action("SongListByAlbum","Default")',
+                data: {albumID:Id},
+                dataType: "json",
+                cache: false,
+                success: function (result) {
+                    for (var i in result) {
+                        var data = "<p>" + result[i].SongName + "</p>";
+                        setData.append(data);
+                    }
+                    alert("im home!");
+                },
+                error: function (response) {
+                    alert('error');
+                }
+            });
+
+        });
+        function openModal() {
+              $(".myModals").on("click", function () {
+            var Id = $(this).attr('id');
+            var par = "#parent-" + Id;
+            var setData = $(par);
+            alert("comming");
+            setData.html("");
+            $.ajax({               
+                type: "get",
+                url: '@Url.Action("SongListByAlbum","Default")',
+                data: {albumID:Id},
+                dataType: "json",
+                cache: false,
+                success: function (result) {
+                    for (var i in result) {
+                        var data = "<p>" + result[i].SongName + "</p>";
+                        setData.append(data);
+                    }
+                    alert("im home!");
+                },
+                error: function (response) {
+                    alert('error');
+                }
+            });
+
+        });
+        }
     </script>
-}
+
+
+

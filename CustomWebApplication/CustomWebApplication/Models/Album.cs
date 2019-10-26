@@ -14,7 +14,7 @@ namespace CustomWebApplication.Models
         public string BandName { get; set; }
         public int Year { get; set; }
         public string AlbumCover { get; set; }
-        public decimal Price { get; set; }
+        public float Price { get; set; }
         public virtual IEnumerable<Song> Songs { get; set; }
         public virtual Category Category { get; set; }
 

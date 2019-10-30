@@ -1,0 +1,127 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.map-wrapper {
+    position: relative;
+    height: calc(100vh - 4em - 64px);
+}
+
+.angular-google-map-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+.angular-google-map-cont {
+    height: 500px;
+}
+
+.angular-google-map {
+    width: 50%;
+    height: 70%;
+    margin: auto 0px;
+}
+
+.google-map-editor {
+    margin-left: 21%;
+    margin-right: 21%;
+}
+
+.locations {
+    text-align: center;
+    font-weight: bold;
+}
+
+    .locations > div {
+        padding: 5px;
+        border-bottom: 1px solid darkgrey;
+        cursor: pointer;
+    }
+
+.flex-container {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-align-content: stretch;
+    -ms-flex-line-pack: stretch;
+    align-content: stretch;
+    -webkit-align-items: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+}
+
+.flex-item {
+    -webkit-order: 0;
+    -ms-flex-order: 0;
+    order: 0;
+    -webkit-flex: 0 1 auto;
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
+    -webkit-align-self: auto;
+    -ms-flex-item-align: auto;
+    align-self: auto;
+    margin: 10px;
+}
+
+.category-tiles {
+    width: 200px;
+    height: 180px;
+}
+
+.card {
+    border: 1px solid #A9A9A9;
+}
+
+.card-title {
+    font-weight: bold;
+}
+
+.card-body {
+    text-align: center;
+    padding-bottom: 5px;
+}
+
+.border-class {
+    text-align: center;
+}
+
+    .border-class:after {
+        content: " ";
+        border-bottom: 1px solid darkgray;
+        display: block;
+        margin: 0 auto;
+        width: 15%;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+.locations-h {
+    margin: 3%;
+    text-align: center;
+}

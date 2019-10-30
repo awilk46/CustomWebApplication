@@ -16,11 +16,25 @@ namespace CustomWebApplication.Controllers
             {
                 Albums = Album.GetAlbumList(),
                 Categories = Category.GetCategoriesList(),
-                Orders = Order.GetOrdersList(),
                 Songs = Song.GetSongList()
             };
             //albumList = bvm.Albums;
             return View(bvm);
+        }
+
+        public JsonResult LocationsToJson()
+        {
+            var locations = Location.GetLocationList();
+
+            return Json(locations, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetMarkerInfo(int locationID)
+        {
+            Location location;
+            location = Location.GetLocationList().Where(x => x.LocationID == locationID).FirstOrDefault();
+
+            return Json(location, JsonRequestBehavior.AllowGet);
         }
     }
 }

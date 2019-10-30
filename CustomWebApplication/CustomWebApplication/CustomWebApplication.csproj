@@ -88,22 +88,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\Default.css" />
+    <Content Include="Content\Home.css" />
+    <Content Include="Content\Images\am.png" />
+    <Content Include="Content\Images\encore.png" />
+    <Content Include="Content\Images\fvm.png" />
+    <Content Include="Content\Images\killers.png" />
+    <Content Include="Content\Images\load.png" />
+    <Content Include="Content\Images\metal.jpg" />
+    <Content Include="Content\Images\rap.jpg" />
+    <Content Include="Content\Images\rock.jpg" />
+    <Content Include="Content\Images\testing.png" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\CategoriesList.js" />
+    <Content Include="Scripts\MapLocations.js" />
     <Content Include="Web.config" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Default\AlbumListByCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -116,9 +117,11 @@
     <Compile Include="Models\Album.cs" />
     <Compile Include="Models\BigViewModel.cs" />
     <Compile Include="Models\Category.cs" />
-    <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\Location.cs" />
     <Compile Include="Models\Song.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Structures\AppConfig.cs" />
+    <Compile Include="Structures\UrlHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -126,8 +129,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="packages.config" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

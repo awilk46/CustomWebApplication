@@ -13,20 +13,20 @@ namespace CustomWebApplication.Controllers
         // GET: Default
         public ActionResult AlbumListByCategory(int categoryID, string sortBy)
         {
-           //string sortBy="";
+            
             ViewBag.SortAlbumNameParameter = string.IsNullOrEmpty(sortBy) ? "AlbumName desc" : "";
             ViewBag.SortBandNameParameter = sortBy == "BandName" ? "BandName desc" : "BandName";
 
             var albumsWithCategory = (from album in Album.GetAlbumList()
-                                 join category in Category.GetCategoriesList()
-                                 on album.CategoryID equals category.CategoryID
-                                 where (categoryID == album.CategoryID)
-                                 select album).ToList().AsQueryable();
+                                      join category in Category.GetCategoriesList()
+                                      on album.CategoryID equals category.CategoryID
+                                      where (categoryID == album.CategoryID)
+                                      select album).ToList().AsQueryable();
 
             switch (sortBy)
             {
                 case "AlbumName desc":
-                    albumsWithCategory = albumsWithCategory.OrderByDescending(x=>x.AlbumName);
+                    albumsWithCategory = albumsWithCategory.OrderByDescending(x => x.AlbumName);
                     break;
                 case "BandName desc":
                     albumsWithCategory = albumsWithCategory.OrderByDescending(x => x.BandName);
@@ -43,7 +43,6 @@ namespace CustomWebApplication.Controllers
             {
                 Albums = albumsWithCategory,
                 Categories = Category.GetCategoriesList(),
-                Orders = Order.GetOrdersList(),
                 Songs = Song.GetSongList()
             };
 
@@ -56,8 +55,8 @@ namespace CustomWebApplication.Controllers
                          on song.AlbumID equals album.AlbumID
                          where (albumID == album.AlbumID)
                          select song).ToList();
-     
-            return Json(songs,JsonRequestBehavior.AllowGet);
+
+            return Json(songs, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetSearchingData(int categoryID, string searchBy, string searchValue)
@@ -71,7 +70,7 @@ namespace CustomWebApplication.Controllers
                                           on album.CategoryID equals category.CategoryID
                                           where (categoryID == album.CategoryID)
                                           select album).Where(x => x.AlbumName.
-                                          StartsWith(searchValue, StringComparison.InvariantCultureIgnoreCase) 
+                                          StartsWith(searchValue, StringComparison.InvariantCultureIgnoreCase)
                                           || searchValue == "")
                                           .ToList();
                 bvm = new BigViewModel()
@@ -96,7 +95,7 @@ namespace CustomWebApplication.Controllers
                 };
                 return Json(albumsWithCategory, JsonRequestBehavior.AllowGet);
             }
-    
+
         }
 
     }

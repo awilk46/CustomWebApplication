@@ -1,8 +1,82 @@
 ﻿@model CustomWebApplication.Models.BigViewModel
+@using CustomWebApplication.Structures
 
-<div class="">
-    @foreach (var category in Model.Categories)
-    {
-        <a href="@Url.Action("AlbumListByCategory","Default",new { categoryID = category.CategoryID })" class="">@category.CategoryName</a>
-    }
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moja wypożyczalnia płyt</title>
+    <link href="~/Content/Home.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.css">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.js"></script>
+    <script src="http://rawgit.com/nmccready/angular-simple-logger/master/dist/angular-simple-logger.js"></script>
+    <script src="https://rawgit.com/angular-ui/angular-google-maps/2.4.1/dist/angular-google-maps.min.js"></script>
+    <script src="~/Scripts/MapLocations.js"></script>
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Strona główna", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav"></ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container body-content">
+        <h1 class="border-class">Kategorie</h1>
+        <div class="flex-container">
+            @foreach (var category in Model.Categories)
+            {
+                <div class="flex-item card">
+                    <img class="card-img-top category-tiles" src="@Url.ImagePath(category.CategoryImage)" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">@category.CategoryName</h5>
+                        <a href="@Url.Action("AlbumListByCategory","Default",new { categoryID = category.CategoryID })" class="btn btn-primary">Zobacz</a>
+                    </div>
+                </div>
+            }
+        </div>
+        <h2 class="locations-h border-class">Znajdź mnie:</h2>
+        <div ng-app="myApp" ng-controller="mapController" class="google-map-editor">
+            <div class="locations flex-container">
+                <div class="flex-item" ng-repeat="l in locations" ng-click="ShowLocation(l.LocationID)">{{l.Name}}</div>
+            </div>
+            <div class="map-wrapper">
+                <ui-gmap-google-map style="box-shadow:2px 2px 2px 2px lightgrey" center="map.center" zoom="map.zoom">
+                    <ui-gmap-marker ng-repeat="marker in markers" coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id">
+                        <ui-gmap-window options="windowOptions" show="windowOptions.show">
+                            <div style="max-width:200px;">
+                                <div class="header">
+                                    <strong>{{marker.Name}}</strong>
+                                </div>
+                                <div id="mapcontent">
+                                    <strong>Adres: </strong>{{marker.address}}
+                                </div>
+                            </div>
+                        </ui-gmap-window>
+                    </ui-gmap-marker>
+                </ui-gmap-google-map>
+            </div>
+        </div>
+    </div>
+    <footer style="margin-top: 5%; padding: 11px; padding-left: 7%; color: #999; font-weight: 500; font-size: 17px;
+    background-color: #111;">
+        <p>&copy; @DateTime.Now.Year - Adrian Wilk</p>
+    </footer>
+</body>
+</html>

@@ -27,7 +27,19 @@ namespace CustomWebApplication.Models
                 new Song(){SongID=9,AlbumID=5,SongName="King nothing"},
                 new Song(){SongID=10,AlbumID=5,SongName="Cure"},
                 new Song(){SongID=11,AlbumID=6,SongName="Drifter"},
-                new Song(){SongID=12,AlbumID=6,SongName="Invasion"}
+                new Song(){SongID=12,AlbumID=6,SongName="Invasion"},
+                new Song(){SongID=13,AlbumID=7,SongName="R u mine?"},
+                new Song(){SongID=14,AlbumID=7,SongName="Do I wanna know?"},
+                new Song(){SongID=15,AlbumID=8,SongName="Teddy Picker"},
+                new Song(){SongID=16,AlbumID=8,SongName="Brianstorm"},
+                new Song(){SongID=17,AlbumID=9,SongName="Evil Deeds"},
+                new Song(){SongID=18,AlbumID=9,SongName="Never Enough"},
+                new Song(){SongID=19,AlbumID=10,SongName="Tony Tone"},
+                new Song(){SongID=20,AlbumID=10,SongName="Changes"},
+                new Song(){SongID=21,AlbumID=11,SongName="King nothing"},
+                new Song(){SongID=22,AlbumID=11,SongName="Cure"},
+                new Song(){SongID=23,AlbumID=12,SongName="Drifter"},
+                new Song(){SongID=24,AlbumID=12,SongName="Invasion"}
             };
 
             return songs;

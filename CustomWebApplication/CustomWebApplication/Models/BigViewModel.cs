@@ -9,7 +9,6 @@ namespace CustomWebApplication.Models
     {
         public IEnumerable<Album> Albums { get; set; }
         public IEnumerable<Category> Categories { get; set; }
-        public IEnumerable<Order> Orders { get; set; }
         public IEnumerable<Song> Songs { get; set; }
     }
 }

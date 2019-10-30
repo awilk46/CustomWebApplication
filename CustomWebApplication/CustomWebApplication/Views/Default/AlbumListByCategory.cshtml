@@ -1,217 +1,136 @@
 ﻿@model CustomWebApplication.Models.BigViewModel
+@using CustomWebApplication.Structures
+
 @{
-    ViewBag.Title = "AlbumListByCategory";
+    ViewBag.Title = "Lista Albumów";
 }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moja wypożyczalnia płyt</title>
+    <link href="~/Content/Default.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.css">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+    <script src="~/Scripts/CategoriesList.js"></script>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Strona główna", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        <div class="search-dv">
+            <span><b>Szukaj po:</b></span>
+            <span>
+                <select class="select-edit" id="searchby">
+                    <option value="AlbumName">Nazwa albumu</option>
+                    <option value="BandName">Nazwa zespołu</option>
+                </select>
+            </span>
+            <span>@Html.TextBox("Search", "", new { @class = "label-edit" }) </span><span><input class="btn btn-primary" type="submit" id="searchBtn" value="Search" /></span>
+        </div>
+        <table class="table-style" style="margin: auto; text-align:center;">
+            <thead>
+                <tr>
+                    <td>ID albumu</td>
+                    <td>@Html.ActionLink("Album Name", "AlbumListByCategory", new { categoryID = Request["categoryID"], sortBy = ViewBag.SortAlbumNameParameter }, new { @class = "anchor-edit" })</td>
+                    <td>@Html.ActionLink("Band Name", "AlbumListByCategory", new { categoryID = Request["categoryID"], sortBy = ViewBag.SortBandNameParameter }, new { @class = "anchor-edit" })</td>
+                    <td>Okładka płyty</td>
+                    <td>Rok wydania</td>
+                    <td>Cena</td>
+                    <td>Lista Piosenek</td>
+                    <td class="hidden">
+                        <input id="categoryID" class="hidden" type="submit" value="@Request["categoryID"]" />
+                    </td>
+                </tr>
+            </thead>
+            <tbody id="dataSearching">
+                @foreach (var item in Model.Albums)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AlbumID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AlbumName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BandName)
+                        </td>
+                        <td>
+                            <div class="album-cover-edit">
+                                <img src="@Url.ImagePath(item.AlbumCover)" alt="Card image cap">
+                            </div>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Year)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            <button id="@item.AlbumID" type="button" class="btn btn-primary myModals" data-toggle="modal" data-target="#exampleModal-@item.AlbumID">
+                                Zobacz
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal-@item.AlbumID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-@item.AlbumID" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel-@item.AlbumID">@item.AlbumName @item.Year, @item.BandName</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div id="parent-@item.AlbumID" class="modal-body">
 
-<div class="">
-    @foreach (var category in Model.Categories)
-    {
-        <a href="@Url.Action("AlbumListByCategory","Default",new { categoryID = category.CategoryID })" class="">@category.CategoryName</a>
-    }
-</div>
-
-
-<div>
-    <b>Szukaj po:</b>
-    <select id="searchby">
-        <option value="AlbumName">Nazwa albumu</option>
-        <option value="BandName">Nazwa zespołu</option>
-    </select>
-    @Html.TextBox("Search")<input type="submit" id="searchBtn" value="Search" />
-</div>
-<table style="margin: auto; text-align:center;">
-    <thead>
-        <tr>
-            <td>ID albumu</td>
-            <td>@Html.ActionLink("Album Name", "AlbumListByCategory", new { categoryID = Request["categoryID"], sortBy = ViewBag.SortAlbumNameParameter })</td>
-            <td>@Html.ActionLink("Band Name", "AlbumListByCategory", new { categoryID = Request["categoryID"], sortBy = ViewBag.SortBandNameParameter })</td>
-            <td>Okładka płyty</td>
-            <td>Rok wydania</td>
-            <td>Cena</td>
-            <td>Lista Piosenek</td>
-            <td class="hidden">Kategoria</td>
-            <td>
-                <input id="categoryID" class="hidden" type="submit" value="@Request["categoryID"]" />
-            </td>
-        </tr>
-    </thead>
-    <tbody id="dataSearching">
-        @foreach (var item in Model.Albums)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AlbumID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AlbumName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BandName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AlbumCover)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Year)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    <button id="@item.AlbumID" type="button" class="btn btn-primary myModals" data-toggle="modal" data-target="#exampleModal-@item.AlbumID">
-                        Zobacz
-                    </button>
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModal-@item.AlbumID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-@item.AlbumID" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel-@item.AlbumID">@item.AlbumName @item.Year, @item.BandName</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div id="parent-@item.AlbumID" class="modal-body">
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button id="closeModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button id="closeModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <h1 class="border-class">Kategorie</h1>
+        <div class="flex-container flex-container-mg">
+            @foreach (var category in Model.Categories)
+            {
+                <div class="flex-item card">
+                    <img class="card-img-top category-tiles" src="@Url.ImagePath(category.CategoryImage)" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">@category.CategoryName</h5>
+                        <a href="@Url.Action("AlbumListByCategory","Default",new { categoryID = category.CategoryID })" class="btn btn-primary">Zobacz</a>
                     </div>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-    <script type="text/javascript">
-        $("#Search").on("input", function () {
-
-            var searchby = $("#searchby").val();
-            var searchVal = $("#Search").val();
-            var catId = $("#categoryID").val();
-            //var catId = "3";
-            var setData = $("#dataSearching");
-            setData.html("");
-            $.ajax({
-                url: "/Default/GetSearchingData",
-                type: "get",
-                dataType: "json",
-                
-                data: {
-                    categoryID: Number(catId),
-                    searchBy: searchby,
-                    searchValue: searchVal
-                },
-                success: function (result) {
-
-                    if (result.length == 0) {
-                        setData.append('<tr><td colspan="7" style="color: red;">Nie odnaleziono szukanej frazy</td></tr>');
-                    }
-                    else {
-
-                        for (var i in result) {
-                            var Data = "<tr>" +
-                                "<td>" + result[i].AlbumID + "</td>" +
-                                "<td>" + result[i].AlbumName + "</td>" +
-                                "<td>" + result[i].BandName + "</td>" +
-                                "<td>" + result[i].AlbumCover + "</td>" +
-                                "<td>" + result[i].Year + "</td>" +
-                                "<td>" + parseFloat(result[i].Price) + "</td>" +
-                                "<td>" +
-                                '<button id="' + result[i].AlbumID + '" type="button" class="btn btn-primary myModals" data-toggle="modal" data-target="#exampleModal-' + result[i].AlbumID + '">' +
-                                "Zobacz </button>" +
-                                '<div class="modal fade" id="exampleModal-' + result[i].AlbumID + '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-' + result[i].AlbumID + '" aria-hidden="true">' +
-                                '<div class="modal-dialog" role="document">' +
-                                '<div class="modal-content">' +
-                                '<div class="modal-header">' +
-                                '<h5 class="modal-title" id="exampleModalLabel-' + result[i].AlbumID + '">' + result[i].AlbumName + ", " + result[i].Year + ", " + result[i].BandName + "</h5>" +
-                                '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
-                                '<span aria-hidden="true">&times;</span> </button> </div>' +
-                                '<div id="parent-' + result[i].AlbumID + '" class="modal-body">' +
-                                "</div>" +
-                                '<div class="modal-footer">' +
-                                '<button id="closeModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>' +
-                                "</div>" +
-                                "</div>" +
-                                "</div>" +
-                                "</div>" +
-                                "</td>" +
-                                "<td>" +
-                                '<input id="categoryID" class="hidden" type="submit" value="' + result[i].CategoryID + '"/>' +
-                                "</td>" +
-                                "</tr>";
-                            setData.append(Data);
-                        }
-                        openModal();
-                    }
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    //alert(xhr.responseText);
-                    alert("Error!!: " + thrownError);
-                },
-                xhr: function () {
-                    var xhr = new window.XMLHttpRequest();
-                    return xhr;
-                }
-            });
-        });
-
-        $(".myModals").on("click", function () {
-            var Id = $(this).attr('id');
-            var par = "#parent-" + Id;
-            var setData = $(par);
-            alert("comming");
-            setData.html("");
-            $.ajax({               
-                type: "get",
-                url: '@Url.Action("SongListByAlbum","Default")',
-                data: {albumID:Id},
-                dataType: "json",
-                cache: false,
-                success: function (result) {
-                    for (var i in result) {
-                        var data = "<p>" + result[i].SongName + "</p>";
-                        setData.append(data);
-                    }
-                    alert("im home!");
-                },
-                error: function (response) {
-                    alert('error');
-                }
-            });
-
-        });
-        function openModal() {
-              $(".myModals").on("click", function () {
-            var Id = $(this).attr('id');
-            var par = "#parent-" + Id;
-            var setData = $(par);
-            alert("comming");
-            setData.html("");
-            $.ajax({               
-                type: "get",
-                url: '@Url.Action("SongListByAlbum","Default")',
-                data: {albumID:Id},
-                dataType: "json",
-                cache: false,
-                success: function (result) {
-                    for (var i in result) {
-                        var data = "<p>" + result[i].SongName + "</p>";
-                        setData.append(data);
-                    }
-                    alert("im home!");
-                },
-                error: function (response) {
-                    alert('error');
-                }
-            });
-
-        });
-        }
-    </script>
-
-
+                </div>
+            }
+        </div>
+    </div>
+    <script src="~/Scripts/CategoriesList.js"></script>
+    <footer style="margin-top: 5%; padding: 11px; padding-left: 7%; color: #999; font-weight: 500; font-size: 17px;
+    background-color: #111;">
+        <p>&copy; @DateTime.Now.Year - Adrian Wilk</p>
+    </footer>
+</body>
+</html>
 

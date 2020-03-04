@@ -1,5 +1,3 @@
 # CustomWebApplication
 
-ASP.NET MVC
-JavaScript
-Angular
+ASP.NET MVC , JavaScript, Angular, HTML, CSS
